@@ -1,5 +1,13 @@
 Xwrits NEWS
 
+Version 2.28  14.Feb.2020
+
+* Re-release of version 2.26 based on unreleased version 2.27, with 
+  inclusion of 2013 lcdfgif header files in the archive.
+
+  Basis of future work on xwrits by rdslw.
+
+
 Version 2.26   3.Apr.2009
 
 * Correct handling of idle-time freedesktop.org ping messages, to avoid
