@@ -222,6 +222,9 @@ new_hand(Port *slave_port, int x, int y)
        port->depth, InputOutput, port->visual, setattr_mask, &setattr);
   }
 
+  /* beep on every new hand warning window created, if beep */
+  if( port->hands && ocurrent->beep ) XBell(port->display, 0);
+
   /* set XWRITS_WINDOW property early to minimize races */
   mark_xwrits_window(port, nh->w);
 
