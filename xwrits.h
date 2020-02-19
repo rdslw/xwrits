@@ -6,6 +6,9 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
+#ifdef HAVE_XSS
+#include <X11/extensions/scrnsaver.h>
+#endif
 #ifndef FD_SET
 #include <sys/select.h>
 #endif
@@ -189,6 +192,7 @@ void erase_all_clocks(void);
 #define A_IDLE_SELECT		0x0080
 #define A_IDLE_CHECK		0x0100
 #define A_MOUSE			0x0200
+#define A_XSS_CHECK			0x0400
 
 struct Alarm {
 
@@ -322,6 +326,9 @@ extern struct timeval quota_allotment;	/* counted towards break */
 
 extern int max_cheats;			/* allow this many cheat events before
 					   cancelling break */
+
+extern int check_xss;			/* use xss */
+extern struct timeval check_xss_time;	/* next time to check xss */
 
 extern int verbose;			/* be verbose */
 

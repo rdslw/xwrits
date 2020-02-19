@@ -287,6 +287,33 @@ loopmaster(Alarmloopfunc alarm_looper, Xloopfunc x_looper)
 	 break;
        }
 
+#ifdef HAVE_XSS
+       case A_XSS_CHECK: {
+     static XScreenSaverInfo* mitInfo = 0;
+     int idle_break = 0;
+
+     if (!mitInfo) mitInfo = XScreenSaverAllocInfo ();
+
+	 for (i = 0; i < nports; i++) {
+	   if (ports[i]->master != ports[i])
+	     continue;
+       /* xautolock uses QueryInfo therefore I hope it's a performant one :) */
+       XScreenSaverQueryInfo (ports[i]->display, ports[i]->root_window, mitInfo);
+       if( mitInfo->idle < check_xss_time.tv_sec * 1000 )
+           idle_break++;
+     }
+     if ( x_looper && idle_break ) { /* we break on ANY port xss idle detection */
+       XEvent event;
+       event.type = MotionNotify; /* we use skeletal MotionNotify as a XSS signal */
+       ret_val = x_looper(&event, &now);
+     }
+     // reschedule
+	 xwADDTIME(a->timer, a->timer, check_xss_time);
+	 schedule(a);
+	 break;
+       }
+#endif
+
        default:
 	if (alarm_looper)
 	  ret_val = alarm_looper(a, &now);

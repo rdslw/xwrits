@@ -237,6 +237,14 @@ Xwrits will display its graphics in black and white. This may be useful if
 you live in a world with a limited colormap.
 '
 .TP 5
+\fBxss\fP (\fB\-xss\fP)
+Xwrits will use X Screen Saver extension to detect inactivity. This may be
+useful if you use gnome/gtk/GDK and others keygrabbing applications which
+are not detected by standard X11 KeyPress/KeyRelease events.
+When using xss mode, mouse shall not be needed as xss detects mouse movements.
+This mode is by default on, if Xwrits was compiled with XSS support.
+'
+.TP 5
 \fB+mouse\fP[=\fIsensitivity\fP] (\fB\-mouse\fP)
 Xwrits will monitor your mouse movements. Every couple seconds, it checks
 whether the mouse has moved. Movements of more than \fIsensitivity\fP

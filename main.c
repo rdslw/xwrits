@@ -58,6 +58,9 @@ static int allow_cheats;
 
 static int run_once;
 
+int check_xss;
+struct timeval check_xss_time;
+
 int verbose;
 
 static int force_mono = 0;
@@ -757,6 +760,8 @@ particular purpose.\n");
       ;
     else if (optparse(s, "wp", 2, "ss", &o->slideshow_text))
       ;
+    else if (optparse(s, "xss", 1, "t"))
+      check_xss = optparse_yesno;
 
     else
       short_usage();
@@ -892,6 +897,14 @@ default_settings(void)
 
   /* how many times to run? */
   run_once = -1;
+
+  /* xss checking mode */
+#ifdef HAVE_XSS
+  check_xss = 1;
+  xwSETTIME(check_xss_time, 2, 0);
+#else
+  check_xss = 0;
+#endif
 }
 
 
@@ -1310,6 +1323,15 @@ main(int argc, char *argv[])
     xwGETTIME(a->timer);
     schedule(a);
   }
+
+#ifdef HAVE_XSS
+  /* start xss checking */
+  if (check_xss) {
+    Alarm *a = new_alarm(A_XSS_CHECK);
+    xwGETTIME(a->timer);
+    schedule(a);
+  }
+#endif
 
   /* main loop */
   main_loop();

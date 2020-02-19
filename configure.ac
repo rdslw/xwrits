@@ -37,6 +37,25 @@ CPPFLAGS="$save_cppflags"
 
 
 dnl
+dnl Xss extension?
+dnl
+
+save_cppflags="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS $X_CFLAGS"
+AC_CHECK_HEADER(X11/extensions/scrnsaver.h, ac_xss_header=y, ac_xss_header=n, [#include <X11/Xlib.h>
+])
+if test "${ac_xss_header}" = y; then
+    AC_CHECK_LIB(Xss, XScreenSaverQueryInfo , ac_xss_lib=y, ac_xss_lib=, ${X_LIBS} ${X_PRE_LIBS} -lX11 -lXext)
+    if test "${ac_xss_lib}" = y; then
+	X_EXT_LIBS="-lXext -lXinerama -lXss"
+	AC_SUBST(X_EXT_LIBS)
+	AC_DEFINE(HAVE_XSS, 1, [Define if the Xss extension is available.])
+    fi
+fi
+CPPFLAGS="$save_cppflags"
+
+
+dnl
 dnl gethostname()
 dnl
 
