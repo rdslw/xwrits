@@ -1,6 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 #include <config.h>
 #include "xwrits.h"
+#include "logopic.c"
 #include <stdlib.h>
 #include <ctype.h>
 #include <math.h>
@@ -216,10 +217,19 @@ new_hand(Port *slave_port, int x, int y)
        x, y, width, height, 0,
        port->depth, InputOutput, port->visual, setattr_mask, &setattr);
 
+    // TODO: learn and check what is icon_window for?
     xwmh->icon_window = nh_icon->w = XCreateWindow
       (port->display, port->root_window,
        x, y, port->icon_width, port->icon_height, 0,
        port->depth, InputOutput, port->visual, setattr_mask, &setattr);
+  }
+
+  /* logo icon hack :-o */
+  {
+      Atom propicon;
+      propicon = XInternAtom(port->display, "_NET_WM_ICON", 0); // 0 = create if not exists
+      XChangeProperty(port->display, nh->w, propicon, XA_CARDINAL, 32, PropModeReplace,
+      (unsigned char*)logo_c32_data, logo_c32_data[0] * logo_c32_data[1] + 2);
   }
 
   /* beep on every new hand warning window created, if beep */
