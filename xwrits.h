@@ -144,7 +144,9 @@ struct Options {
   unsigned beep: 1;			/* beep when bringing up a warn? */
   unsigned clock: 1;			/* show clock for time since warn? */
   unsigned appear_iconified: 1;		/* show warns as icons? */
+  unsigned never_close: 1;		/* don't let warns be closed? */
   unsigned never_iconify: 1;		/* don't let warns be iconified? */
+  unsigned never_move: 1;		/* don't let warns be moved? */
   unsigned top: 1;			/* keep warn windows on top? */
   unsigned multiply: 1;			/* multiply warn windows? */
   unsigned lock: 1;			/* lock screen? */

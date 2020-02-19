@@ -179,15 +179,17 @@ new_hand(Port *slave_port, int x, int y)
        in <Xm/MwmUtil.h> and output of xprop. */
     mwm_hints.flags = (1L << 0) | (1L << 1);
     /* flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS */
-    mwm_hints.functions = (1L << 2) | (1L << 5);
-    /* functions = MWM_FUNC_MOVE | MWM_FUNC_CLOSE */
+    if( !ocurrent->never_close )
+        mwm_hints.functions |= (1L << 5);
+    if( !ocurrent->never_move )
+        mwm_hints.functions |= (1L << 2);
     mwm_hints.decorations = (1L << 1) | (1L << 3) | (1L << 4);
     /* decorations = MWM_DECOR_BORDER | MWM_DECOR_TITLE | MWM_DECOR_MENU */
     mwm_hints.inputMode = ~(0L);
     mwm_hints.status = 0;
 
-    /* Add MINIMIZE options only if the window might be iconifiable */
-    if (!ocurrent->never_iconify) {
+    /* Add MINIMIZE options only if the window might be iconifiable and no noclose*/
+    if (!ocurrent->never_iconify && !ocurrent->never_close) {
       mwm_hints.functions |= (1L << 3); /* MWM_FUNC_MINIMIZE */
       mwm_hints.decorations |= (1L << 5); /* MWM_DECOR_MINIMIZE */
     }

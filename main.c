@@ -132,7 +132,9 @@ Appearance:\n\
   maxhands=NUM        Maximum number of warning windows is NUM (default 25).\n\
   +mono               Use monochrome pictures.\n\
   +multiply=PERIOD    Make a new warning window every PERIOD.\n\
+  +noclose            Don't let anyone close the warning window.\n\
   +noiconify          Don't let anyone iconify the warning window.\n\
+  +nomove             Don't let anyone move the warning window.\n\
   ready-picture=GIF-FILE, okp=GIF-FILE   Show GIF animation on the 'OK' window.\n\
   rest-picture=GIF-FILE, rp=GIF-FILE     Show GIF animation on resting window.\n\
   title=TITLE         Set xwrits window title to TITLE.\n\
@@ -713,8 +715,12 @@ parse_options(int pargc, char **pargv)
     else if (optparse(s, "maxhands", 2, "si", &o->max_hands))
       ;
 
+    else if (optparse(s, "noclose", 3, "t"))
+      o->never_close = optparse_yesno;
     else if (optparse(s, "noiconify", 3, "t"))
       o->never_iconify = optparse_yesno;
+    else if (optparse(s, "nomove", 3, "t"))
+      o->never_move = optparse_yesno;
     else if (optparse(s, "nooffscreen", 3, "t"))
       /* No longer supported because it never really worked well, wasn't
 	 useful, and screwed over virtual desktop users. To resupport it,
