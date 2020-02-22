@@ -1,5 +1,22 @@
 Xwrits NEWS
 
+Version 2.29  22.Feb.2020
+
+* Support for libXss (X Screen Saver) X11 extension to detect inactivity.
+  This shall result in much better inactivity detection (esp. on Gnome etc.)
+
+  We're using internal 2s check_time, which means e.g. that with cheat=3,
+  you must type in 3 separate 2s windows to activate it.
+
+  TODO: we may disable window/subwindow monitoring if xss is active.
+
+* XBell sounds on every new hand window created (if beep option)
+
+* Xwrits has own icon, shown in window manager task switcher (alt-tab)
+
+* Added noclose nomove options to make it more difficult to get rid of hands
+
+
 Version 2.28  14.Feb.2020
 
 * Re-release of version 2.26 based on unreleased version 2.27, with 

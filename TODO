@@ -1,3 +1,18 @@
+- new option for dpiscalling (or at least allow 2x window/image size)
+  + decide how to do it (runtime X11 or GIF scaling, or gif files  :)
+
+- new option to stay alway on top (https://stackoverflow.com/questions/4345224/x11-xlib-window-always-on-top)
+
+- consider random password patch https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=315577
+  + with printing on lockbar screen in small fonts
+
+- consider exec before/after lock: https://gist.github.com/dmedvinsky/560491
+
+- fix quota, as 'quota=0' behaves unexpectedly, as it results in check_quota=1
+  and quota_time=0 BUT LATER in wait_x_loop quota_allotment is messed up :)
+
+***  all above todos, are of rdslw origin ***
+
 - Xwrits should optionally log to a file the number of keystrokes made each
   time period, and optionally some other statistics. Suggested by Miernik
   <miernik@ctnet.pl>.

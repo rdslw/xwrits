@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([xwrits], [2.28])
+AC_INIT([xwrits], [2.29])
 AC_CONFIG_SRCDIR([clock.c])
 AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER([config.h])
