@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([xwrits], [2.29])
+AC_INIT([xwrits], [2.30beta])
 AC_CONFIG_SRCDIR([clock.c])
 AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER([config.h])
@@ -16,6 +16,8 @@ fi)
 
 AC_PATH_XTRA
 
+dnl Default X_EXT_LIBS must have Xext
+X_EXT_LIBS="-lXext"
 
 dnl
 dnl Xinerama extension?
@@ -28,9 +30,9 @@ AC_CHECK_HEADER(X11/extensions/Xinerama.h, ac_xinerama_header=y, ac_xinerama_hea
 if test "${ac_xinerama_header}" = y; then
     AC_CHECK_LIB(Xinerama, XineramaQueryScreens, ac_xinerama_lib=y, ac_xinerama_lib=, ${X_LIBS} ${X_PRE_LIBS} -lX11 -lXext)
     if test "${ac_xinerama_lib}" = y; then
-	X_EXT_LIBS="-lXext -lXinerama"
-	AC_SUBST(X_EXT_LIBS)
-	AC_DEFINE(HAVE_XINERAMA, 1, [Define if the Xinerama extension is available.])
+        X_EXT_LIBS="$X_EXT_LIBS -lXinerama"
+        AC_SUBST(X_EXT_LIBS)
+        AC_DEFINE(HAVE_XINERAMA, 1, [Define if the Xinerama extension is available.])
     fi
 fi
 CPPFLAGS="$save_cppflags"
@@ -47,9 +49,9 @@ AC_CHECK_HEADER(X11/extensions/scrnsaver.h, ac_xss_header=y, ac_xss_header=n, [#
 if test "${ac_xss_header}" = y; then
     AC_CHECK_LIB(Xss, XScreenSaverQueryInfo , ac_xss_lib=y, ac_xss_lib=, ${X_LIBS} ${X_PRE_LIBS} -lX11 -lXext)
     if test "${ac_xss_lib}" = y; then
-	X_EXT_LIBS="-lXext -lXinerama -lXss"
-	AC_SUBST(X_EXT_LIBS)
-	AC_DEFINE(HAVE_XSS, 1, [Define if the Xss extension is available.])
+        X_EXT_LIBS="$X_EXT_LIBS -lXss"
+        AC_SUBST(X_EXT_LIBS)
+        AC_DEFINE(HAVE_XSS, 1, [Define if the Xss extension is available.])
     fi
 fi
 CPPFLAGS="$save_cppflags"
