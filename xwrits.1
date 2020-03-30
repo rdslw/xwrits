@@ -1,5 +1,5 @@
 .\" -*- mode: nroff -*-
-.ds V 2.29
+.ds V 2.30
 .ds E " \-\- 
 .if t .ds E \(em
 '
@@ -205,8 +205,10 @@ break length (see \fBbreaktime\fP above). \fBidle\fP is on by default.
 '
 .TP 5
 \fBkeystrokes\fP (\fB\-keystrokes\fP)
-Disabling keystrokes detection (original) engine to track keypresses.
-It is not needed if xss mode is enabled. Default being negated xss option.
+Disabling original keystrokes detection engine to track keypresses.
+It's not needed if xss mode is enabled (no electron apps!)
+If xsslib support was compiled in, default for keystrokes is off.
+
 '
 .TP 5
 \fB+lock\fP[=\fIjump-time\fP] (\fB\-lock\fP)

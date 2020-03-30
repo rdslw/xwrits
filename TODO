@@ -1,3 +1,11 @@
+- add xwrits.desktop file and installation
+
+- add xwrits.service systemctl and installation
+
+- what to do about xwrits.spec file (and download url?)
+
+- add printing options and Header on start (check rest_picture & others)
+
 - new option for dpiscalling (or at least allow 2x window/image size)
   + decide how to do it (runtime X11 or GIF scaling, or gif files  :)
 
