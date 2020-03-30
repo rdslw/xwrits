@@ -1280,7 +1280,7 @@ main(int argc, char *argv[])
 
   /* fix cheats */
   if (!allow_cheats)
-    max_cheats = 0;
+    max_cheats = 1; /* must be 1, not 0, as i3wm puts some X11 event, triggering rest_x_loop */
   else if (max_cheats == MAX_CHEATS_UNSET)
     max_cheats = 5;
 
