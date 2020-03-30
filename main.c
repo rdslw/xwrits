@@ -61,6 +61,8 @@ static int run_once;
 int check_xss;
 struct timeval check_xss_time;
 
+int check_keystrokes;
+
 int verbose;
 
 static int force_mono = 0;
@@ -695,7 +697,8 @@ parse_options(int pargc, char **pargv)
       o->appear_iconified = optparse_yesno;
     else if (optparse(s, "idle", 1, "tT", &idle_time))
       check_idle = optparse_yesno;
-
+    else if (optparse(s, "keystrokes", 1, "t"))
+      check_keystrokes = optparse_yesno;
     else if (optparse(s, "lock", 1, "tT", &o->lock_bounce_delay))
       o->lock = optparse_yesno;
     else if (optparse(s, "lock-picture", 5, "ss", &locked_slideshow_text)
@@ -911,6 +914,12 @@ default_settings(void)
 #else
   check_xss = 0;
 #endif
+
+  /* keystrokes monitoring, default is !check_xss */
+  if( check_xss)
+      check_keystrokes = 0;
+  else
+      check_keystrokes = 1;
 }
 
 
@@ -1316,12 +1325,14 @@ main(int argc, char *argv[])
     }
   }
 
-  /* watch keystrokes on all windows */
-  xwGETTIME(now);
-  old_x_error_handler = XSetErrorHandler(x_error_handler);
-  for (i = 0; i < nports; i++)
-      if (ports[i]->master == ports[i])
-	  watch_keystrokes(ports[i], ports[i]->root_window, &now);
+  if (check_keystrokes) {
+    /* watch keystrokes on all windows */
+    xwGETTIME(now);
+    old_x_error_handler = XSetErrorHandler(x_error_handler);
+    for (i = 0; i < nports; i++)
+        if (ports[i]->master == ports[i])
+            watch_keystrokes(ports[i], ports[i]->root_window, &now);
+  }
 
   /* start mouse checking */
   if (check_mouse) {
