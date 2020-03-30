@@ -94,10 +94,14 @@ register_keystrokes(Port *port, Window w)
      and not selecting events on 'em would seem to help performance. */
 
   XWindowAttributes attr;
+  XClassHint class;
   Window peer;
 
   if (XGetWindowAttributes(port->display, w, &attr) == 0)
     return;
+
+  if (XGetClassHint(port->display, w, &class) == 0)
+      return;
 
   /* check if this is an xwrits window */
   peer = check_xwrits_window(port, w);
@@ -110,9 +114,11 @@ register_keystrokes(Port *port, Window w)
     key_press_selected_count++;
     XSelectInput(port->display, w, SubstructureNotifyMask | KeyPressMask);
     if (verbose)
-      fprintf(stderr, "Window 0x%x: listening for keystrokes\n", (unsigned)w);
+      fprintf(stderr, "Window 0x%x: (%s) listening for keystrokes\n", 
+              (unsigned)w, class.res_class);
   } else if (verbose)
-    fprintf(stderr, "Window 0x%x: skipping keystrokes\n", (unsigned)w);
+    fprintf(stderr, "Window 0x%x: (%s) skipping keystrokes\n", 
+            (unsigned)w, class.res_class );
 }
 
 
@@ -192,6 +198,33 @@ unschedule_data(int actions, void *data1)
   }
 }
 
+void
+looprinter(int i, int ret_val)
+{
+    char desc[16];
+
+    if( !verbose )
+        return;
+
+    switch(ret_val) {
+        case 1:
+            strcpy(desc, "TRAN_WARN"); break;
+        case 2:
+            strcpy(desc, "TRAN_CANCEL"); break;
+        case 3:
+            strcpy(desc, "TRAN_FAIL"); break;
+        case 4:
+            strcpy(desc, "TRAN_REST"); break;
+        case 5:
+            strcpy(desc, "TRAN_LOCK"); break;
+        case 6:
+            strcpy(desc, "TRAN_AWAKE"); break;
+        default:
+            strcpy(desc, "UNKNOWN"); break;
+    }
+
+    fprintf(stderr, "TRANSITION via loopmaster %d >> %s\n", i, desc);
+}
 
 int
 loopmaster(Alarmloopfunc alarm_looper, Xloopfunc x_looper)
@@ -322,7 +355,10 @@ loopmaster(Alarmloopfunc alarm_looper, Xloopfunc x_looper)
       }
 
       if (!a->scheduled) xfree(a);
-      if (ret_val != 0) return ret_val;
+      if (ret_val != 0) {
+        looprinter(1, ret_val);
+        return ret_val;
+      }
     }
 
     if (alarm_sentinel.next != &alarm_sentinel) {
@@ -362,8 +398,11 @@ loopmaster(Alarmloopfunc alarm_looper, Xloopfunc x_looper)
 	default_x_processing(&event);
 	if (x_looper)
 	    ret_val = x_looper(&event, &now);
-	if (ret_val != 0)
+	if (ret_val != 0) {
+            looprinter(2, ret_val);
 	    return ret_val;
+        }
       }
   }
 }
+
